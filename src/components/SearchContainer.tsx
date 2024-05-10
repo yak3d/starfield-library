@@ -1,6 +1,7 @@
 import { graphql, useStaticQuery } from 'gatsby'
 import React, { useEffect, useState } from 'react'
 import * as JsSearch from 'js-search'
+import { Input, Table } from 'react-daisyui'
 
 export const SearchContainer = () => {
     const gqlResults: GatsbyTypes.SfBooksSearchQuery = useStaticQuery(graphql`
@@ -20,16 +21,16 @@ export const SearchContainer = () => {
 
     console.log(data)
     const [bookList, setBookList] = useState<{
-                readonly editorId: string | null
-                readonly bookTitle: string | null
-                readonly bookText: string | null;
-            }[]>(data)
+        readonly editorId: string | null
+        readonly bookTitle: string | null
+        readonly bookText: string | null;
+    }[]>(data)
     const [search, setSearch] = useState<JsSearch.Search>()
     const [searchResults, setSearchResults] = useState<{
-                readonly editorId: string | null
-                readonly bookTitle: string | null
-                readonly bookText: string | null;
-            }[]>(data)
+        readonly editorId: string | null
+        readonly bookTitle: string | null
+        readonly bookText: string | null;
+    }[]>(data)
     const [isLoading, setIsLoading] = useState(true)
     const [isError, setIsError] = useState(false)
     const [searchQuery, setSearchQuery] = useState("")
@@ -78,111 +79,50 @@ export const SearchContainer = () => {
     }
 
     return (
-    <>
-        <div>
-            <div style={{ margin: "0 auto" }}>
-                <form onSubmit={handleSubmit}>
-                    <div style={{ margin: "0 auto" }}>
-                        <label htmlFor="Search" style={{ paddingRight: "10px" }}>
-                            Enter your search here
-                        </label>
-                        <input
-                            id="Search"
-                            value={searchQuery}
-                            onChange={searchData}
-                            placeholder="Enter your search here"
-                            style={{ margin: "0 auto", width: "400px" }}
-                        />
+        <>
+            <div>
+                <div style={{ margin: "0 auto" }}>
+                    <form onSubmit={handleSubmit}>
+                        <div className='form-control w-full max-w-xs'>
+                            <div className='label'>
+                                <label htmlFor="Search" className='label-text'>
+                                    Enter your search here
+                                </label>
+                            </div>
+                            <Input
+                                id="Search"
+                                value={searchQuery}
+                                onChange={searchData}
+                                placeholder="Enter your search here"
+                                style={{ margin: "0 auto", width: "400px" }}
+                            />
+                        </div>
+                    </form>
+                    <div>
+                        Number of items:
+                        {searchResults.length}
+                        <Table>
+                            <Table.Head>
+                                <span>Editor ID</span>
+                                <span>Slate Name</span>
+                                <span>Slate Text</span>
+                            </Table.Head>
+                            <Table.Body>
+                                {searchResults.map(item => {
+                                    return (
+                                        <Table.Row key={`row_${item.editorId}`}>
+                                            <span>{item.editorId}</span>
+                                            <span>{item.bookTitle}</span>
+                                            <span>{item.bookText}</span>
+                                        </Table.Row>
+                                    )
+                                })}
+                            </Table.Body>
+                        </Table>
                     </div>
-                </form>
-                <div>
-                    Number of items:
-                    {searchResults.length}
-                    <table
-                        style={{
-                            width: "100%",
-                            borderCollapse: "collapse",
-                            borderRadius: "4px",
-                            border: "1px solid #d3d3d3",
-                        }}
-                    >
-                        <thead style={{ border: "1px solid #808080" }}>
-                            <tr>
-                                <th
-                                    style={{
-                                        textAlign: "left",
-                                        padding: "5px",
-                                        fontSize: "14px",
-                                        fontWeight: 600,
-                                        borderBottom: "2px solid #d3d3d3",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    Book ISBN
-                                </th>
-                                <th
-                                    style={{
-                                        textAlign: "left",
-                                        padding: "5px",
-                                        fontSize: "14px",
-                                        fontWeight: 600,
-                                        borderBottom: "2px solid #d3d3d3",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    Book Title
-                                </th>
-                                <th
-                                    style={{
-                                        textAlign: "left",
-                                        padding: "5px",
-                                        fontSize: "14px",
-                                        fontWeight: 600,
-                                        borderBottom: "2px solid #d3d3d3",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    Book Author
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {searchResults.map(item => {
-                                return (
-                                    <tr key={`row_${item.editorId}`}>
-                                        <td
-                                            style={{
-                                                fontSize: "14px",
-                                                border: "1px solid #d3d3d3",
-                                            }}
-                                        >
-                                            {item.editorId}
-                                        </td>
-                                        <td
-                                            style={{
-                                                fontSize: "14px",
-                                                border: "1px solid #d3d3d3",
-                                            }}
-                                        >
-                                            {item.bookTitle}
-                                        </td>
-                                        <td
-                                            style={{
-                                                fontSize: "14px",
-                                                border: "1px solid #d3d3d3",
-                                            }}
-                                        >
-                                            {item.bookText}
-                                        </td>
-                                    </tr>
-                                )
-                            })}
-                        </tbody>
-                    </table>
                 </div>
             </div>
-        </div>
         </>
     )
-                    
+
 }
