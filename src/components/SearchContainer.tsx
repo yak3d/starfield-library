@@ -80,7 +80,7 @@ export const SearchContainer = () => {
 
     return (
         <>
-            <div>
+            <div className='container mx-auto'>
                 <div style={{ margin: "0 auto" }}>
                     <form onSubmit={handleSubmit}>
                         <div className='form-control w-full max-w-xs'>
@@ -94,7 +94,6 @@ export const SearchContainer = () => {
                                 value={searchQuery}
                                 onChange={searchData}
                                 placeholder="Enter your search here"
-                                style={{ margin: "0 auto", width: "400px" }}
                             />
                         </div>
                     </form>
